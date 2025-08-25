@@ -1,0 +1,5 @@
+title: "LangChain4J Blog"
+description: "Experiments with LangChain4J and Spring JPA"
+theme: minima
+markdown: kramdown
+paginate: 5

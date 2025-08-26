@@ -1,0 +1,36 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_data:/root/.ollama
+      - ./init:/init
+    environment:
+      - OLLAMA_KEEP_ALIVE=-1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    entrypoint: [ "/bin/sh", "/init/run_ollama.sh" ]
+
+  db:
+    image: postgres:latest
+    container_name: db-langchain4j-spring-jpa-memory-demo
+    ports:
+      - 15432:5432
+    environment:
+      - POSTGRES_USER=demo-user
+      - POSTGRES_PASSWORD=not-secure
+      - POSTGRES_DB=demo
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+
+volumes:
+  ollama_data:
+    name: ollama_data
